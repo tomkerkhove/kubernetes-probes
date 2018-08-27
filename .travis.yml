@@ -1,0 +1,13 @@
+sudo: required
+language: csharp
+dotnet: 2.1.302
+services:
+  - docker
+os:  
+  - linux
+branches:  
+ only:
+   - master
+script:
+ - dotnet --info
+ - dotnet build TomKerkhove.Probes.sln --configuration release
