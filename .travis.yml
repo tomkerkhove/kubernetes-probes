@@ -11,3 +11,5 @@ branches:
 script:
  - dotnet --info
  - dotnet build src/TomKerkhove.Probes.sln --configuration release
+ - dotnet build src/TomKerkhove.Probes.sln --configuration release
+ - docker build ./src/ --file ./src/TomKerkhove.Samples.Service/Dockerfile --no-cache
