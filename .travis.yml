@@ -10,4 +10,4 @@ branches:
    - master
 script:
  - dotnet --info
- - dotnet build TomKerkhove.Probes.sln --configuration release
+ - dotnet build src/TomKerkhove.Probes.sln --configuration release
