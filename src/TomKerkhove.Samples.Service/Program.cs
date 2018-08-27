@@ -10,7 +10,7 @@ namespace TomKerkhove.Samples.Service
     {
         public static async Task Main(string[] args)
         {
-            var rawProbePort = Environment.GetEnvironmentVariable("Probe_Port");
+            var rawProbePort = Environment.GetEnvironmentVariable("Probe_Tcp_Port");
             var probePort = int.Parse(rawProbePort);
             var healthProbeListener = new HealthProbeListener(probePort);
             var host = new HostBuilder()

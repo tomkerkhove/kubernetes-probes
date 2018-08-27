@@ -25,7 +25,7 @@ spec:
       - name: kubernetes-liveness-service
         image: tomkerkhove/kubernetes-liveness-service
         env:
-        - name:  Probe_Port
+        - name:  Probe_Tcp_Port
           value: "8888"
         ports:
         - name: liveness-port
