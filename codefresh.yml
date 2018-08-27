@@ -1,0 +1,20 @@
+version: '1.0'
+steps:
+  BuildingDockerImage:
+    title: Building Docker Image
+    type: build
+    image_name: tomkerkhove/kubernetes-liveness-samples-service
+    working_directory: ./src/
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: TomKerkhove.Samples.Service/Dockerfile
+  PushingToDockerRegistry:
+    title: Pushing to Docker Registry
+    type: push
+    candidate: '${{BuildingDockerImage}}'
+    tag: 'latest'
+    registry: DockerHub
+    when:
+      condition:
+        all:
+          validateTargetBranch: '"${{CF_PULL_REQUEST_TARGET}}" == "master"'
+          validatePRAction: '''${{CF_PULL_REQUEST_ACTION}}'' == ''accepted'''
