@@ -46,35 +46,40 @@ namespace TomKerkhove.Probes
             }
         }
 
-        private async Task HandleNewClientConnectionAsync(TcpClient tcpClient)
+        private Task HandleNewClientConnectionAsync(TcpClient tcpClient)
         {
-            var message = string.Empty;
-            while (message != null && !message.StartsWith(value: "quit"))
-            {
-                var clientStream = tcpClient.GetStream();
-
-                byte[] data = Encoding.ASCII.GetBytes(DefaultResponseMessage);
-                clientStream.Write(data, offset: 0, size: data.Length);
-                LogMessage($"Wrote '{DefaultResponseMessage}' back to client");
-
-                data = new byte[1024];
-
-                int numberOfBytesRead;
-                while ((numberOfBytesRead = clientStream.Read(data, offset: 0, size: data.Length)) > 0)
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await memoryStream.WriteAsync(data, offset: 0, count: numberOfBytesRead);
-
-                        message = Encoding.ASCII.GetString(memoryStream.ToArray(), index: 0, count: (int) memoryStream.Length);
-                    }
-
-                    LogMessage(message);
-                }
-            }
+            WriteResponse(tcpClient, DefaultResponseMessage);
+            LogMessage($"Wrote '{DefaultResponseMessage}' back to client");
 
             LogMessage(message: "Closing connection.");
             tcpClient.GetStream().Dispose();
+
+            return Task.CompletedTask;
+        }
+
+        private static void WriteResponse(TcpClient tcpClient, string responseMessage)
+        {
+            var clientStream = tcpClient.GetStream();
+            byte[] data = Encoding.ASCII.GetBytes(responseMessage);
+            clientStream.Write(data, offset: 0, size: data.Length);
+        }
+
+        private async Task<string> ReadAndLogRequest(string message, NetworkStream clientStream, byte[] data)
+        {
+            int numberOfBytesRead;
+            while ((numberOfBytesRead = clientStream.Read(data, offset: 0, size: data.Length)) > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await memoryStream.WriteAsync(data, offset: 0, count: numberOfBytesRead);
+
+                    message = Encoding.ASCII.GetString(memoryStream.ToArray(), index: 0, count: (int)memoryStream.Length);
+                }
+
+                LogMessage(message);
+            }
+
+            return message;
         }
 
         private async Task HandleTcpRequestAsync(TcpListener tcpListener)
