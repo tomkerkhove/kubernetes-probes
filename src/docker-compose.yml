@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   tomkerkhove.samples.service:
-    image: ${DOCKER_REGISTRY}tomkerkhovesamplesservice
+    image: tomkerkhove/kubernetes-liveness-samples-service
     build:
       context: .
       dockerfile: TomKerkhove.Samples.Service/Dockerfile
