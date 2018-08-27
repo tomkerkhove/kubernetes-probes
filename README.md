@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: kubernetes-liveness-service
-        image: tomkerkhove/kubernetes-liveness-service
+        image: tomkerkhove/kubernetes-liveness-samples-service
         env:
         - name:  Probe_Tcp_Port
           value: "8888"
